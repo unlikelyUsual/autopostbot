@@ -1,9 +1,7 @@
 import praw
 import os
 from dotenv import load_dotenv
-from pathlib import Path
-# from download_media import download_video
-from download import download_video
+from reddit.download import download_video
 
 load_dotenv()
 
@@ -21,7 +19,7 @@ def get_reddit_videos(sub_reddits, num_top_posts=3):
             subreddit = reddit.subreddit(subreddit_name)
             top_posts = subreddit.top(limit=num_top_posts,time_filter='day')
             for post in top_posts:
-                if post.is_video:
+                if post.is_video and not post.over_18:
                     video_posts.append({
                         "title": post.title,
                         "url": post.url,
@@ -35,23 +33,21 @@ def get_reddit_videos(sub_reddits, num_top_posts=3):
     sorted_video_posts = sorted(video_posts, key=lambda x: x["score"], reverse=True)
     return sorted_video_posts
 
-def main():
-    # to_fetch_from = ["Damnthatsinteresting", "funny", "aww", "animalsdoingstuff" ,"nextfuckinglevel", "oddlysatisfying", "Unexpected", "MadeMeSmile", "ContagiousLaughter"]
-    to_fetch_from = ["Damnthatsinteresting"]
+def get_and_download_videos():
+    print("🔍 Fetching videos from Reddit...")
+    to_fetch_from = ["Damnthatsinteresting", "funny", "aww", "animalsdoingstuff" ,"nextfuckinglevel", "oddlysatisfying", "Unexpected", "MadeMeSmile", "ContagiousLaughter"]
+    # to_fetch_from = ["Damnthatsinteresting"]
     num_top_posts_to_fetch = int(os.environ.get("REDDIT_MAX_POSTS"))
 
     # Get top based on score
     top_video_posts = get_reddit_videos(to_fetch_from, num_top_posts_to_fetch)
 
     if top_video_posts:
-        print("\nAll Video Posts from Reddit: ")
         for i,post in enumerate(top_video_posts):
             video_url = post['url']
             print(video_url)
-            sanitized_title = "".join(c if c.isalnum() else "_" for c in post['title'][:50])    # Create a filename.  Sanitize the title to be safe.
-            download_video(video_url, sanitized_title)
+            sanitized_title = "".join(c if c.isalnum() else "_" for c in post['title'][:50])
+        return download_video(video_url, sanitized_title)
     else:
         print("No video posts found in the specified sub reddits")
-
-if __name__ == "__main__":
-    main()
+        return None
