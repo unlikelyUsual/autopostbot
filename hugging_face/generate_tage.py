@@ -1,11 +1,12 @@
-from openai import OpenAI
+from huggingface_hub import InferenceClient
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
+client = InferenceClient(
+    provider="hyperbolic",
+    api_key=os.environ.get("HUGGING_FACE_API_KEY"),
 )
 
 def generate_instagram_tags(subreddit, posttitle):
@@ -17,19 +18,16 @@ post title: {posttitle}
 
 Only return the hashtags as a space-separated list. Do not include explanations."""
 
-    response = client.chat.completions.create(
-        # model="gpt-4o-mini",
-        model="gpt-4o",
+    completion = client.chat.completions.create(
+        model="deepseek-ai/DeepSeek-V3-0324",
         messages=[
-            {"role": "developer", "content": "Talk like a pirate."},
             {
                 "role": "user",
-                "content": prompt,
-            },
+                "content": prompt
+            }
         ],
     )
 
-    print(response.output_text)
 
-    hashtags = response.choices[0].message['content'].strip()
+    hashtags = completion.choices[0].message.content.strip()
     return hashtags

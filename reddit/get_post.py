@@ -2,6 +2,7 @@ import praw
 import os
 from dotenv import load_dotenv
 from reddit.download import download_video
+from hugging_face.generate_tage import generate_instagram_tags
 
 load_dotenv()
 
@@ -47,7 +48,7 @@ def get_and_download_videos():
             video_url = post['url']
             print(video_url)
             sanitized_title = "".join(c if c.isalnum() else "_" for c in post['title'][:50])
-        return download_video(video_url, sanitized_title)
+        return {"saved_path": download_video(video_url, sanitized_title), "tag": generate_instagram_tags(post['subreddit'],post['title'])} 
     else:
         print("No video posts found in the specified sub reddits")
         return None
