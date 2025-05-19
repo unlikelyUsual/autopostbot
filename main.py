@@ -18,17 +18,15 @@ def daily_task():
         print(f"Skipped ⚠️: {saved_path}")
 
 # Schedules the daily_task function to run every day at 10:00 AM IST.
-# def schedule_daily_task():
-#     ist_timezone = pytz.timezone('Asia/Kolkata')
+def schedule_daily_task():
+    ist_timezone = pytz.timezone('Asia/Kolkata')
 
-#     schedule.every().day.at("01:00", ist_timezone).do(daily_task)  
+    schedule.every().day.at("01:00", ist_timezone).do(daily_task)  
 
-#     # Keep the script running to execute the scheduled tasks and Check for pending tasks every minute.
-#     while True:
-#         schedule.run_pending()
-#         time.sleep(60)
+    # Keep the script running to execute the scheduled tasks and Check for pending tasks every minute.
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
 
-# if __name__ == "__main__":
-#     schedule_daily_task()
-
-daily_task()
+if __name__ == "__main__":
+    schedule_daily_task()
