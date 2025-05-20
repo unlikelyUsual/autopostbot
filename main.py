@@ -1,7 +1,7 @@
 from pathlib import Path
-import schedule
-import time
-import pytz
+# import schedule
+# import time
+# import pytz
 from reddit.get_post import get_and_download_videos
 from instagram.instagram_uploader import upload_video_to_instagram
 
