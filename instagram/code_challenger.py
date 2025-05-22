@@ -48,9 +48,3 @@ def challenge_code_handler(username, choice):
     if choice == ChallengeChoice.EMAIL:
         return get_code_from_email(username)
     return False
-
-
-if __name__ == "__main__":
-    cl = Client()
-    cl.challenge_code_handler = challenge_code_handler
-    cl.login(os.environ.get("INSTA_USER_USERNAME"), os.environ.get("INSTA_USER_PASSWORD"))

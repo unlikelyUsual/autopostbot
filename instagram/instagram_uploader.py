@@ -1,9 +1,11 @@
 from instagrapi import Client
 import logging, os, time, random
 from dotenv import load_dotenv
+from .code_challenger import challenge_code_handler
 
 load_dotenv()
 cl = Client()
+# cl.challenge_code_handler = challenge_code_handler
 cl.login(os.environ.get("INSTA_USER_USERNAME"),os.environ.get("INSTA_USER_PASSWORD"))
 
 logging.basicConfig(level=logging.INFO)
